@@ -1,0 +1,582 @@
+---
+title: "API Reference - v2.0"
+description: "Complete API documentation for v2.0 with GraphQL support"
+---
+
+# Salsa as a Service API v2.0
+
+The v2.0 API adds GraphQL support, enhanced webhooks, and new AI forecasting endpoints.
+
+## Base URL
+
+<CodeGroup>
+    ```text REST
+    https://api.salsaasaservice.com/v2
+    ```
+
+    ```text GraphQL
+    https://api.salsaasaservice.com/graphql
+    ```
+</CodeGroup>
+
+<Note>
+  <strong>New in v2.0:</strong> GraphQL support for flexible queries and subscriptions.
+</Note>
+
+## Authentication
+
+All API requests require authentication using your API key.
+
+<Note>
+  <strong>API Key:</strong> Get your API key from the{" "}
+  <a href="https://app.salsaasaservice.com/settings/api">Developer Settings</a> in your dashboard.
+</Note>
+
+### Authentication Header
+
+<ParamField body="header" path="Authorization" type="string" required>
+  The Authorization header expects a Bearer token. Use API key <code>Bearer YOUR_API_KEY</code>.
+</ParamField>
+
+## Rate Limits
+
+- **Free Plan**: 1,000 requests per hour
+- **Professional Plan**: 10,000 requests per hour  
+- **Enterprise Plan**: 100,000 requests per hour
+
+Rate limit headers are included in all responses:
+
+<ParamField header="X-RateLimit-Limit" type="number">
+  Your request limit for the current window. For example, <code>1000</code> for the Free Plan.
+</ParamField>
+<ParamField header="X-RateLimit-Remaining" type="number">
+  Remaining requests in the current window. For example, <code>999</code> after one request on the Free Plan.
+</ParamField>
+<ParamField header="X-RateLimit-Reset" type="number">
+  UNIX epoch timestamp when the window resets. For example, <code>1640995200</code>
+</ParamField>
+
+## Core Endpoints
+
+<Columns col="2">
+  <Card title="Inventory Management" href="#inventory-management" >
+    Manage salsa ingredients, track stock levels, and monitor freshness.
+  </Card>
+  <Card title="Recipe Management" href="#recipe-management">
+    Create, update, and manage salsa recipes and production workflows.
+  </Card>
+  <Card title="Production Tracking" href="#production-tracking">
+    Track salsa production batches, quality metrics, and yield data.
+  </Card>
+  <Card title="Analytics & Reporting" href="#analytics-&-reporting">
+    Access detailed analytics and generate custom reports.
+  </Card>
+</Columns>
+
+## Inventory Management 
+
+### Get All Ingredients
+
+Retrieve a list of all ingredients in your inventory.
+
+```http
+GET /ingredients
+```
+
+<CodeGroup>
+```bash Request
+curl --request GET \
+  --url 'https://api.salsaasaservice.com/v2/ingredients' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+</CodeGroup>
+<CodeGroup>
+```json Response
+  {
+    "data": [
+      {
+        "id": "ing_123",
+        "name": "Roma Tomatoes",
+        "category": "vegetables",
+        "current_stock": 25.5,
+        "unit": "lbs",
+        "supplier": "Fresh Farms Co.",
+        "last_updated": "2024-01-15T10:30:00Z",
+        "expiry_date": "2024-01-20T00:00:00Z",
+        "quality_score": 8.5
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "per_page": 50,
+      "total": 1
+    }
+  }
+```
+</CodeGroup>
+
+### Update Ingredient Stock
+
+Update the stock level for a specific ingredient.
+
+```http
+PUT /ingredients/{ingredient_id}/stock
+```
+#### Path Parameters
+<ParamField path="ingredient_id" type="string" required>
+  The unique identifier of the ingredient to update.
+</ParamField>
+
+<CodeGroup>
+```bash Request
+  curl --request PUT \
+  --url 'https://api.salsaasaservice.com/v2/ingredients/{ingredient_id}/stock' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "quantity": 30.0,
+    "unit": "lbs",
+    "notes": "New shipment received"
+  }'
+```
+</CodeGroup>
+<CodeGroup>
+```json Response
+  {
+    "id": "ing_123",
+    "name": "Roma Tomatoes",
+    "current_stock": 30.0,
+    "unit": "lbs",
+    "updated_at": "2024-01-15T11:00:00Z"
+  }
+```
+</CodeGroup>
+
+### Add New Ingredient
+
+Add a new ingredient to your inventory.
+
+```http
+POST /ingredients
+```
+<CodeGroup>
+```bash Request
+ curl --request POST \
+  --url 'https://api.salsaasaservice.com/v2/ingredients' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \ 
+  --data '{
+    "name": "Jalapeño Peppers",
+    "category": "vegetables",
+    "initial_stock": 5.0,
+    "unit": "lbs",
+    "supplier": "Spice Garden",
+    "expiry_date": "2024-01-25T00:00:00Z"
+  }'
+```
+</CodeGroup>
+
+## Recipe Management 
+
+### Get All Recipes
+
+Retrieve all salsa recipes in your account.
+
+```http
+GET /recipes
+```
+<CodeGroup>
+```bash Request
+ curl --request GET \
+  --url 'https://api.salsaasaservice.com/v2/recipes' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+</CodeGroup>
+<CodeGroup>
+```json Response
+  {
+    "data": [
+      {
+        "id": "rec_456",
+        "name": "House Salsa",
+        "description": "Our signature medium-spice salsa",
+        "spice_level": "medium",
+        "batch_size": 5.0,
+        "yield": "gallons",
+        "prep_time": 30,
+        "ingredients": [
+          {
+            "ingredient_id": "ing_123",
+            "name": "Roma Tomatoes",
+            "quantity": 2.0,
+            "unit": "lbs"
+          }
+        ],
+        "created_at": "2024-01-10T09:00:00Z",
+        "updated_at": "2024-01-15T14:30:00Z"
+      }
+    ]
+  }
+```
+</CodeGroup>
+
+### Create New Recipe
+
+Create a new salsa recipe.
+
+```http
+POST /recipes
+```
+<CodeGroup>
+```bash Request
+ curl --request POST \
+  --url 'https://api.salsaasaservice.com/v2/recipes' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Spicy Chipotle Salsa",
+    "description": "Smoky and spicy chipotle-based salsa",
+    "spice_level": "hot",
+    "batch_size": 3.0,
+    "yield": "gallons",
+    "prep_time": 45,
+    "ingredients": [
+      {
+        "ingredient_id": "ing_789",
+        "quantity": 1.5,
+        "unit": "lbs"
+      }
+    ]
+  }'
+```
+</CodeGroup>
+<CodeGroup>
+```json Response
+  {
+    "name": "Spicy Chipotle Salsa",
+    "description": "Smoky and spicy chipotle-based salsa",
+    "spice_level": "hot",
+    "batch_size": 3.0,
+    "yield": "gallons",
+    "prep_time": 45,
+    "ingredients": [
+      {
+        "ingredient_id": "ing_789",
+        "quantity": 1.5,
+        "unit": "lbs"
+      }
+    ]
+  }
+```
+</CodeGroup>
+
+### Update Recipe
+
+Update an existing recipe.
+
+```http
+PUT /recipes/{recipe_id}
+```
+<CodeGroup>
+```bash Request
+ curl --request PUT \
+  --url 'https://api.salsaasaservice.com/v2/recipes/{recipe_id}' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+```
+</CodeGroup>
+
+## Production Tracking 
+
+### Start Production Batch
+
+Begin tracking a new salsa production batch.
+
+```http
+POST /production/batches
+```
+<CodeGroup>
+```bash Request
+ curl --request POST \
+  --url 'https://api.salsaasaservice.com/v2/production/batches' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "recipe_id": "rec_456",
+    "batch_number": "BATCH-2024-001",
+    "planned_quantity": 5.0,
+    "production_date": "2024-01-15T08:00:00Z",
+    "assigned_chef": "chef_123"
+  }'
+```
+</CodeGroup>
+<CodeGroup>
+```json Response
+  {
+    "id": "batch_789",
+    "recipe_id": "rec_456",
+    "batch_number": "BATCH-2024-001",
+    "status": "in_progress",
+    "started_at": "2024-01-15T08:00:00Z",
+    "assigned_chef": "chef_123"
+  }
+```
+</CodeGroup>
+
+### Complete Production Batch
+
+Mark a production batch as completed with quality metrics.
+
+```http
+PUT /production/batches/{batch_id}/complete
+```
+#### Path Parameters
+<ParamField path="batch_id" type="string" required>
+  The unique identifier of the production batch to complete.
+</ParamField>
+
+<CodeGroup>
+```bash Request
+ curl --request PUT \
+  --url 'https://api.salsaasaservice.com/v2/production/batches/{batch_id}/complete' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+  --header 'Content-Type: application/json' \
+  --data '{
+    "actual_quantity": 4.8,
+    "quality_score": 9.2,
+    "notes": "Excellent batch, perfect consistency",  
+    "completed_at": "2024-01-15T09:30:00Z"
+  }'
+```
+</CodeGroup>
+
+
+### Get Production History
+
+Retrieve production history with filtering options.
+
+```http
+GET /production/batches
+```
+#### Query Parameters
+
+<ParamField query="start_date" type="string">
+  Filter batches starting from this date (inclusive). Format: ISO 8601.
+</ParamField>
+<ParamField query="end_date" type="string">
+  Filter batches up to this date (inclusive). Format: ISO 8601.
+</ParamField>
+<ParamField query="recipe_id" type="string">
+  Filter batches by recipe ID.
+</ParamField>
+
+<CodeGroup>
+```bash Request
+ curl --request GET \
+  --url 'https://api.salsaasaservice.com/v2/production/batches?start_date=2024-01-01&end_date=2024-01-31&recipe_id=rec_456' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+</CodeGroup>
+
+
+## Analytics & Reporting 
+
+### Get Production Analytics
+
+Retrieve analytics data for salsa production.
+
+```http
+GET /analytics/production
+```
+#### Query Parameters
+<ParamField query="period" type="string">
+  Time period for analytics (e.g., <code>7d</code>, <code>30d</code>, <code>90d</code>).
+</ParamField>
+<ParamField query="recipe_id" type="string">
+  Optional recipe ID to filter analytics by specific recipe.
+</ParamField>
+
+<CodeGroup>
+```bash Request
+ curl --request GET \
+  --url 'https://api.salsaasaservice.com/v2/analytics/production?period=30d&recipe_id=rec_456' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+</CodeGroup>
+
+<CodeGroup>
+```json Response
+  {
+    "period": "30d",
+    "total_batches": 45,
+    "total_quantity": 225.0,
+    "average_quality_score": 8.7,
+    "waste_percentage": 2.3,
+    "top_performing_recipes": [
+      {
+        "recipe_id": "rec_456",
+        "name": "House Salsa",
+        "batches": 30,
+        "avg_quality": 9.1
+      }
+    ]
+  }
+```
+</CodeGroup>
+
+### Get Inventory Analytics
+
+Get insights into inventory usage and optimization opportunities.
+
+```http
+GET /analytics/inventory
+```
+#### Query Parameters
+<ParamField query="period" type="string">
+  Time period for analytics (e.g., <code>7d</code>, <code>30d</code>, <code>90d</code>).
+</ParamField>
+
+<CodeGroup>
+```bash Request
+ curl --request GET \
+  --url 'https://api.salsaasaservice.com/v2/analytics/inventory?period=30d' \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+</CodeGroup>
+
+## Error Handling
+
+The API uses standard HTTP status codes and returns detailed error information.
+
+### Error Response Format
+
+<ResponseField name="error.code" type="string" required>
+  Machine-readable error code (for example, <code>INVALID_REQUEST</code>).
+</ResponseField>
+<ResponseField name="error.message" type="string" required>
+  Human-readable explanation of what went wrong.
+</ResponseField>
+<ResponseField name="error.details" type="object">
+  Optional, structured details (for example, validation errors).
+</ResponseField>
+
+<CodeGroup>
+```json Response
+{
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "The request body is missing required fields",
+    "details": {
+      "missing_fields": ["name", "category"]
+    }
+  }
+}
+```
+</CodeGroup>
+
+### Common Error Codes
+
+
+#### Client Errors
+
+- `400 Bad Request` - Invalid request data
+    - `401 Unauthorized` - Missing or invalid API key
+    - `403 Forbidden` - Insufficient permissions
+    - `404 Not Found` - Resource not found
+    - `422 Unprocessable Entity` - Validation errors
+    - `429 Too Many Requests` - Rate limit exceeded
+
+#### Server Errors
+
+- `500 Internal Server Error` - Server error
+    - `502 Bad Gateway` - Upstream service error
+    - `503 Service Unavailable` - Service temporarily unavailable
+
+
+
+## SDKs and Libraries
+
+We provide official SDKs for popular programming languages:
+
+<Columns cols="3">
+  <Card title="JavaScript/Node.js" href="https://github.com/salsaasaservice/salsa-js">
+      Official SDK for JavaScript and Node.js applications.
+  </Card>
+  <Card title="Python" href="https://github.com/salsaasaservice/salsa-python">
+      Python SDK for data analysis and automation.
+  </Card>
+  <Card title="PHP" href="https://github.com/salsaasaservice/salsa-php">
+      PHP SDK for web applications and WordPress plugins.
+  </Card>
+</Columns>
+
+## Webhooks
+
+Configure webhooks to receive real-time notifications about important events.
+
+### Supported Events
+
+<ParamField body="ingredient.low_stock">
+  When ingredient stock falls below threshold
+</ParamField>
+<ParamField body="production.batch_completed">
+  When a production batch is completed
+</ParamField>
+<ParamField body="quality.alert">
+  When quality scores fall below acceptable levels
+</ParamField>
+<ParamField body="inventory.expiry_warning">
+  When ingredients are approaching expiry
+</ParamField>
+
+### Webhook Configuration
+
+```http
+POST /webhooks
+```
+
+<CodeGroup>
+```bash Request
+ curl --request POST \
+  --url 'https://api.salsaasaservice.com/v2/webhooks' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "url": "https://your-app.com/webhooks/salsa",
+    "events": ["ingredient.low_stock", "production.batch_completed"],
+    "secret": "your_webhook_secret"
+  }'
+```
+</CodeGroup>
+
+## Testing
+
+Use our sandbox environment for testing your integrations:
+
+**Sandbox Base URL:**
+```
+https://api-sandbox.salsaasaservice.com/v1
+```
+
+<Warning>
+  <strong>Sandbox Data:</strong> The sandbox environment uses test data and doesn't affect your production account.
+</Warning>
+
+
+## Support
+
+Need help with the API? We're here to assist:
+
+<Columns cols={2}>
+  <Card title="Email support" icon="envelope" href="mailto:api-support@salsaasaservice.com" arrow="true">
+    Contact us at <code>api-support@salsaasaservice.com</code>.
+  </Card>
+  <Card title="Documentation" icon="book-open">
+    Browse our comprehensive guides.
+  </Card>
+  <Card title="Developer community" icon="users">
+    Join our Discord server.
+  </Card>
+  <Card title="Video tutorials" icon="video">
+    Watch integration tutorials.
+  </Card>
+</Columns>

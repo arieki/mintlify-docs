@@ -1,0 +1,414 @@
+---
+title: "Getting Started with v2.0"
+description: "Complete guide to setting up Salsa as a Service v2.0 with AI features and IoT integration"
+---
+
+# Getting Started with Salsa as a Service v2.0
+
+Welcome to v2.0! This guide will help you set up your account and leverage the new AI-powered features, IoT sensors, and advanced integrations.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- A valid business email address
+- Access to your restaurant's systems (POS, inventory, etc.)
+- Basic knowledge of your current salsa operations
+- Admin access to configure integrations
+- **New in v2.0**: Optional IoT sensor hardware for quality monitoring
+
+## Quick Setup Wizard
+<Tabs>
+   <Tab title="Quick Setup Wizard">
+      <Note>
+         **Smart Setup**: v2.0 includes an AI-powered setup wizard that analyzes your restaurant profile and recommends optimal configuration.
+      </Note>
+
+      <Steps>
+         <Step title="Create Your Account">
+            Sign up with your business email. v2.0 offers SSO integration with Google, Microsoft, and Okta for enterprise customers.
+            <Tip>
+               Enterprise customers can enable Single Sign-On during signup for seamless team access.
+            </Tip>
+         </Step>
+         <Step title="Smart Profile Configuration">
+            Our AI assistant analyzes your restaurant type and recommends optimal settings. Simply answer a few questions about your operations.
+         </Step>
+         <Step title="Connect Your Systems">
+            v2.0 detects compatible systems on your network and offers one-click integration setup for supported platforms.
+         </Step>
+         <Step title="Import Historical Data">
+            Optionally import historical sales and production data to train the AI forecasting engine for immediate insights.
+         </Step>
+         <Step title="Configure AI Features">
+            Enable demand forecasting, quality prediction, and auto-reordering based on your operational needs.
+         </Step>
+      </Steps>
+   </Tab>
+   <Tab title="Account Setup">
+      <AccordionGroup>
+         <Accordion title="Step 1: Advanced account creation" defaultOpen>
+            <Steps>
+               <Step title="Visit the signup page">
+                  Go to our [signup page](https://app.salsaasaservice.com/signup) to create your account.
+               </Step>
+               <Step title="Choose authentication method">
+                  Select from multiple authentication options:
+                  - Email/password with 2FA
+                  - SSO (Google, Microsoft, Okta)
+                  - SAML 2.0 for enterprise customers
+               </Step>
+               <Step title="Verify your email or SSO provider"/>
+               <Step title="Complete enhanced business verification"/>
+            </Steps>
+            <Note>
+               **Enhanced Security:** v2.0 supports biometric authentication, hardware security keys, and passwordless login options.
+            </Note>
+         </Accordion>
+
+         <Accordion title="Step 2: AI-assisted profile configuration" defaultOpen>
+            Navigate to **Settings > Restaurant Profile** where our AI assistant guides you through setup:
+            
+            <Tabs>
+               <Tab title="Basic Information">
+                  - Restaurant name, address, and contact details
+                  - Cuisine type and specializations
+                  - Number of locations and geographic regions
+                  - Operating hours and peak times
+                  - **New**: Upload your menu for automatic recipe suggestions
+               </Tab>
+               <Tab title="Kitchen Infrastructure">
+                  - Kitchen size, layout, and equipment inventory
+                  - Number of prep stations and production capacity
+                  - Refrigeration and storage specifications
+                  - **New**: IoT sensor placement recommendations
+                  - **New**: Equipment integration (smart ovens, refrigerators)
+               </Tab>
+               <Tab title="Operations">
+                  - Daily production volume and historical data
+                  - Current salsa varieties and recipes
+                  - Peak production hours and seasonal patterns
+                  - **New**: AI analyzes your patterns and suggests optimization
+                  - **New**: Waste tracking and sustainability goals
+               </Tab>
+               <Tab title="Team & Permissions">
+                  - Team structure and department organization
+                  - Role-based access control (RBAC) configuration
+                  - Custom permission policies
+                  - **New**: Biometric access control integration
+                  - **New**: Activity-based authentication rules
+               </Tab>
+            </Tabs>
+         </Accordion>
+      </AccordionGroup>
+   </Tab>
+</Tabs>
+
+## AI Feature Configuration
+
+### Demand Forecasting Setup
+
+Enable AI-powered demand forecasting to predict salsa needs 7-30 days in advance:
+
+<Steps>
+   <Step title="Enable Forecasting">
+      Go to **AI Features > Demand Forecasting** and toggle the feature on.
+   </Step>
+   <Step title="Connect Data Sources">
+      Link your POS system, reservation system, and any external data sources (weather APIs, local event calendars).
+   </Step>
+   <Step title="Historical Data Import">
+      Import at least 90 days of historical sales data for optimal accuracy. The AI improves over time.
+   </Step>
+   <Step title="Set Forecast Parameters">
+      Configure forecast horizon (7, 14, or 30 days), confidence intervals, and alert thresholds.
+   </Step>
+   <Step title="Review Initial Forecast">
+      The AI generates your first forecast within 24 hours. Review and adjust as needed.
+   </Step>
+</Steps>
+
+<Note>
+   **Forecast Accuracy**: The AI achieves 70-80% accuracy with 90 days of data and improves to 95%+ accuracy after 6 months of learning.
+</Note>
+
+### Quality Prediction
+
+Configure AI quality monitoring to detect issues before they occur:
+
+<CodeGroup>
+```javascript JavaScript
+// Example: Configure quality monitoring via API
+const qualityConfig = {
+  enabled: true,
+  monitoring_interval: "5m",  // Check every 5 minutes
+  thresholds: {
+    temperature: { min: 35, max: 40, unit: "F" },
+    freshness_score: { min: 8.0, max: 10.0 },
+    consistency: { min: 7.5 }
+  },
+  alert_channels: ["email", "sms", "push", "slack"],
+  auto_action: {
+    low_quality_detected: "pause_production",
+    temperature_violation: "notify_manager"
+  }
+};
+```
+</CodeGroup>
+
+## IoT Sensor Integration
+
+### Supported Sensor Types
+
+v2.0 integrates with a wide range of IoT sensors:
+
+<Columns cols={3}>
+  <Card title="Temperature Sensors" icon="thermometer" href="#temperature-sensors">
+    Monitor refrigeration and cooking temperatures in real-time.
+  </Card>
+  <Card title="Freshness Sensors" icon="leaf" href="#freshness-sensors">
+    RFID and chemical sensors track ingredient freshness.
+  </Card>
+  <Card title="Quality Meters" icon="check" href="#quality-meters">
+    Automated pH, viscosity, and consistency measurement.
+  </Card>
+</Columns>
+
+
+
+### Setting Up IoT Sensors
+
+<Steps>
+   <Step title="Hardware Selection">
+      Choose compatible sensors from our [certified hardware catalog](https://salsaasaservice.com/hardware) or use our pre-configured sensor kits.
+   </Step>
+   <Step title="Physical Installation">
+      Follow the installation guide to place sensors in optimal locations. Our mobile app includes AR visualization for sensor placement.
+   </Step>
+   <Step title="Network Configuration">
+      Connect sensors to your network via WiFi, Bluetooth, or our IoT gateway device.
+   </Step>
+   <Step title="Sensor Registration">
+      Use the mobile app to scan sensor QR codes and automatically register them to your account.
+   </Step>
+   <Step title="Calibration">
+      Run the automated calibration routine to ensure accurate readings.
+   </Step>
+</Steps>
+
+<Warning>
+  **Hardware Requirements:** IoT sensors require a stable network connection. We recommend a dedicated IoT network for security and reliability.
+</Warning>
+
+
+## Advanced Integration Setup
+
+### POS System Integration (Enhanced)
+
+v2.0 offers improved POS integration with real-time bidirectional sync:
+<Tabs>
+   <Tab title="Square">
+      1. **One-Click Connect**
+         Go to **Integrations > POS Systems** and click "Connect Square". Authorize with OAuth 2.0.
+
+      2. **Automatic Menu Mapping**
+         AI automatically maps Square menu items to inventory items with 98% accuracy. Review and confirm.
+
+      3. **Real-Time Sync**
+         Enable real-time inventory updates. Sales data syncs within 5 seconds.
+
+      4. **Configure Webhooks**
+         Set up bidirectional webhooks for instant updates in both systems.
+   </Tab>
+   <Tab title="Toast">
+      1. **API Key Connection**
+         Enter your Toast API credentials. v2.0 supports Toast's latest v2 API.
+
+      2. **Menu Sync**
+         AI maps complex menu structures including modifiers and combo items.
+
+      3. **Multi-Location**
+         Configure location-specific settings for restaurant groups.
+   </Tab>
+   <Tab title="Clover">
+      1. **App Installation**
+         Install Salsa as a Service v2.0 app from Clover App Market.
+
+      2. **Permission Grant**
+         Grant necessary permissions for inventory and sales data access.
+         
+      3. **Sync Configuration**
+         Choose sync frequency and data scope.
+   </Tab>
+   <Tab title="Enterprise POS">
+      For enterprise POS systems (Oracle Micros, NCR Aloha, etc.):
+      - **Custom Integration**: Our team builds tailored integrations
+      - **API Gateway**: Use our enterprise API gateway for secure connectivity
+      - **ETL Pipeline**: Configure data transformation rules
+      - **Dedicated Support**: Enterprise customers get dedicated integration engineers
+   </Tab>
+</Tabs>
+
+
+### Supply Chain Integration
+
+<Note>
+  <strong>New in v2.0:</strong> Direct integration with major food distributors enables automated ordering based on AI forecasts.
+</Note>
+
+
+Supported distributors:
+- Sysco
+- US Foods
+- Performance Food Group
+- Gordon Food Service
+- Local and regional distributors via API
+
+### ERP System Integration
+
+Connect v2.0 with your enterprise resource planning system:
+
+<CodeGroup>
+```python python
+# Example: ERP integration configuration
+from salsa_sdk import SalsaClient
+
+client = SalsaClient(api_key="your_api_key")
+
+# Connect to SAP
+erp_connection = client.integrations.connect_erp(
+    system="sap",
+    credentials={
+        "host": "erp.yourcompany.com",
+        "client": "100",
+        "username": "SALSA_INT",
+        "auth_type": "oauth"
+    },
+    sync_options={
+        "inventory": True,
+        "procurement": True,
+        "cost_accounting": True,
+        "frequency": "real-time"
+    }
+)
+
+print(f"ERP connected: {erp_connection.status}")
+```
+</CodeGroup>
+
+## First Production Run with AI
+
+Once your setup is complete, start your first AI-enhanced production run:
+
+<Steps>
+  <Step title="Review AI Forecast">
+    Check the demand forecast for today and upcoming days in <strong>Dashboard &gt; Forecast</strong>.
+  </Step>
+  <Step title="Start Smart Production">
+    Navigate to <strong>Production &gt; Smart Batch</strong> and let AI recommend optimal batch size and timing.
+  </Step>
+  <Step title="Real-Time Monitoring">
+    IoT sensors automatically track production quality. View real-time metrics on your dashboard or mobile app.
+  </Step>
+  <Step title="Quality Verification">
+    AI analyzes sensor data and provides quality score predictions before batch completion.
+  </Step>
+  <Step title="Complete & Learn">
+    Complete the batch. AI learns from this production run to improve future forecasts and recommendations.
+  </Step>
+</Steps>
+
+
+
+## Mobile App Features
+
+The v2.0 mobile app includes significant enhancements:
+
+<Columns cols={3}>
+  <Card title="Offline Mode" icon="robot" href="#offline-mode">
+    Full functionality without internet. Auto-sync when connection returns.
+  </Card>
+  <Card title="AR Sensor Placement" icon="bell" href="#ar-features">
+    Use augmented reality to visualize optimal sensor placement.
+  </Card>
+  <Card title="Voice Commands" icon="mobile" href="#voice-commands">
+    Hands-free operation with natural language voice commands.
+  </Card>
+</Columns>
+
+
+## Next Steps
+
+Now that you're set up, explore these advanced features:
+
+<Columns cols={3}>
+  <Card title="Advanced Usage" href="/v2/advanced-usage" arrow="true">
+    Deep dive into AI forecasting, IoT monitoring, and automation.
+  </Card>
+  <Card title="Integrations Guide" href="/v2/integrations" arrow="true">
+    Explore all 50+ available integrations.
+  </Card>
+  <Card title="API Documentation" href="/v2/api-reference" arrow="true">
+    Build custom integrations with our GraphQL API.
+  </Card>
+</Columns>
+
+## Migration from v1.0
+
+<Tabs>
+   <Tab title="Automatic Migration">
+      <Tip>
+         **Recommended for most customers**
+      </Tip>
+      <Steps>
+         <Step title="Request migration from your dashboard"/>
+         <Step title="Our team reviews your configuration"/>
+         <Step title="Migration happens automatically with zero downtime"/>
+         <Step title="All data, recipes, and integrations transfer seamlessly"/>
+         <Step title="Receive training on new v2.0 features"/>
+      </Steps>
+   </Tab>
+   <Tab title="Manual Migration">
+      <Note>
+         **For customers with complex custom configurations**
+      </Note>
+      <Steps>
+         <Step title="Export data from v1.0 using our migration tool"/>
+         <Step title="Review compatibility report"/>
+         <Step title="Adjust custom integrations for v2.0 API"/>
+         <Step title="Import data into v2.0 account"/>
+         <Step title="Validate and test before switching"/>
+      </Steps>
+   </Tab>
+</Tabs>
+
+
+## Need Help?
+
+v2.0 includes enhanced support options:
+
+<Columns cols={2}>
+  <Card title="AI Assistant" icon="message-bot">
+    In-app AI assistant answers questions and provides guidance 24/7.
+  </Card>
+  <Card title="Email support" icon="envelope" href="mailto:support@salsaasaservice.com" arrow="true">
+    <code>support@salsaasaservice.com</code> (2-4 hour response time)
+  </Card>
+  <Card title="Live chat" icon="messages">
+    24/7 chat support in your dashboard
+  </Card>
+  <Card title="Phone support" icon="phone">
+    1-800-SALSA-V2 (Extended hours for v2.0 customers)
+  </Card>
+  <Card title="Video library" icon="video">
+    Comprehensive video tutorials for all features
+  </Card>
+  <Card title="Documentation" icon="book-open">
+    Extensive guides and API documentation
+  </Card>
+</Columns>
+
+<Note>
+  <strong>Free Onboarding:</strong> All v2.0 customers receive complimentary onboarding sessions with our customer success team.
+</Note>
+

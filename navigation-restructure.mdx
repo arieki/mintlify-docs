@@ -1,0 +1,108 @@
+---
+title: Documentation Navigation Design
+description: Explanation of the documentation structure, UX improvements, and scalability decisions.
+---
+
+This page documents how and why I refactored `docs.json` for a clearer, scalable information architecture across **versions** (v1/v2) and **languages** (English/French).
+
+## Important facts
+
+- **Multiple audiences**: These docs serve operators/admins (setup, workflows), integrators/IT (systems + security), and developers (API, webhooks, SDKs).
+- **Multiple versions**: v2 introduces major capabilities (AI/IoT/GraphQL), while v1 remains available but is positioned as legacy with an announced support horizon.
+- **Multiple languages**: French content mirrors both v1 and v2, so navigation must stay in sync to avoid “missing pages” when switching.
+- **Real entry points aren’t only the sidebar**: Users land via search, bookmarks, or shared links (especially into API reference and changelog).
+
+Based on these facts, I made a few navigation decisions.
+
+## Decision: Version + language model (first-class switching)
+
+- **Problem**: Without explicit version/language partitioning, users can end up reading the wrong version or lose their place when switching language.
+- **Alternatives**:
+  - A single navigation tree with “v1/” and “v2/” sections mixed together.
+  - Separate sites per version or per language.
+  - Versioned navigation with language switching (Mintlify-supported).
+- **Decision**: Use `navigation.languages[].versions[]` so version and language switching are explicit and predictable, with **v2 as default**.
+- **Trade-offs**:
+  - **Upside**: Prevents “wrong version/language” confusion and scales to more versions/languages cleanly.
+  - **Downside**: More navigation config to maintain.
+
+## Decision: Top-level grouping optimized for mixed personas
+
+- **Problem**: A flat sidebar forces every reader to scan too much, and unclear group names make it easy to pick the wrong path (operator vs developer).
+- **Alternatives**:
+  - **Flat**: list all pages under a version without grouping.
+  - Feature-led grouping (Analytics/Quality/Inventory/Integrations as top-level groups).
+  - Persona-led grouping (Operators vs Developers).
+  - Journey-led grouping (Start → Guides → Resources → Help).
+- **Decision**: Use a journey-led structure per version:
+  - **Start here**: orientation + first steps (and pricing).
+  - **Product guides**: how-to and feature guidance.
+  - **Resources**: technical reference + what changed (API + changelog).
+  - **Help**: troubleshooting.
+- **Trade-offs**:
+  - **Upside**: Matches how mixed personas browse (start → learn → reference → troubleshoot).
+  - **Downside**: “Product guides” can become broad as content grows.
+  - **Why not persona-led**: Many teams overlap (e.g., operators configuring integrations), so persona silos create duplicate content.
+
+## Decision: Page duplication between versions (parity vs divergence)
+
+- **Problem**: Some pages are effectively “the same topic” across versions (e.g., analytics, inventory), which raises a navigation question: do we duplicate pages across versions or try to unify them?
+- **Alternatives**:
+  - Unify topics into one page and annotate “v1 vs v2” differences inside it.
+  - Keep separate pages per version (v1 and v2 each has its own paths) but maintain a consistent sidebar shape.
+  - Remove “older” pages from navigation and rely on search/links.
+- **Decision**: Keep **version-specific pages** and maintain **navigation parity** (same group layout and page coverage per version where content exists).
+- **Trade-offs**:
+  - **Upside**: Readers always know which version they’re reading and don’t lose pages when switching versions.
+  - **Downside**: More content to maintain across versions.
+  - **Why not unify pages**: Mixing v1 and v2 details on one page increases cognitive load and is error-prone for time-sensitive integration work.
+
+## Decision: Pricing visibility (v2-only vs per version)
+
+- **Problem**: Pricing is a high-intent page used by buyers and evaluators. With multiple versions, we need to decide whether pricing should be “latest only” or visible per version.
+- **Alternatives**:
+  - Show **only v2 pricing** (single source of truth).
+  - Show pricing under **each version** (v1 and v2), even if the content is similar.
+  - Move pricing out of versioned navigation entirely and link it only from the navbar/marketing site.
+- **Decision**: Keep pricing **in each version’s “Start here”**. In practice this keeps the sidebar consistent and ensures pricing is always one click away regardless of the reader’s current version context.
+- **Trade-offs**:
+  - **Upside**: High-intent page stays discoverable in any version context (no “missing page” on version switch).
+  - **Downside**: Potential duplication if pricing is version-agnostic.
+
+## Decision: Keep changelog discoverable for non-developers
+
+- **Problem**: Changelog is used by developers, but also by support and admins (“what changed?”). If it’s developer-only, it becomes harder to find.
+- **Alternatives**:
+  - Changelog as its own “Release notes” group.
+  - Changelog merged under a developer-labeled group.
+  - Changelog available both in sidebar and in the top navbar.
+- **Decision**: Place changelog inside **Resources** (so it stays close to API reference for technical readers) and keep a navbar shortcut labeled **What’s new** for fast access.
+- **Trade-offs**:
+  - **Upside**: Supports both browsing (sidebar) and “quick check” workflows (navbar), across personas.
+  - **Downside**: Duplicate entry points to the same page.
+
+## Decision: Make v1 “legacy” without breaking access
+
+- **Problem**: The docs need to keep v1 accessible, but strongly encourage v2 to reduce new adoption of a version approaching end-of-support.
+- **Alternatives**:
+  - Hide v1 entirely (breaks existing customers and links).
+  - Keep v1 equal footing with v2 (increases accidental usage).
+  - Keep v1 visible but clearly labeled and guided.
+- **Decision**:
+  - Tag v1 as **Legacy** in the version selector.
+  - Add **language-specific banners** that communicate v1’s status and point directly to v2 entry points (API reference + getting started).
+- **Trade-offs**:
+  - **Upside**: Keeps v1 accessible while nudging new work to v2; users see the migration path even on deep links.
+  - **Downside**: Banner is visible across pages (mitigated by dismissible behavior).
+
+## Decision: Internationalization details (labels + paths)
+
+- **Problem**: Even with translated content, untranslated navigation labels create a “partially localized” experience and reduce trust.
+- **Alternatives**:
+  - Keep English group labels for all languages.
+  - Localize only the page content.
+  - Localize navigation labels and key navbar links per language.
+- **Decision**: Localize French group labels and navbar link labels while keeping **identical page coverage** between English and French for each version.
+- **Trade-offs**:
+  - **Upside**: Fully localized navigation improves trust and reduces wayfinding friction for French readers.
+  - **Downside**: Requires maintaining labels in two languages.

@@ -1,0 +1,164 @@
+---
+title: Component Choices
+description: Discussion of component selection, user experience considerations
+---
+
+This page documents how and why I enhanced the **v2** documentation using Mintlify components—what I changed, what I didn’t change, and the trade-offs.
+
+## Important facts
+
+- **Task scope**: Task 2 targets **v2 files** (English first, with French parity where feasible).
+- **Content shape (current state)**:
+  - Long, scroll-heavy pages with repeated patterns (setup steps, feature lists, troubleshooting flows).
+  - Many single-language code blocks (HTTP/JS/Python/GraphQL) that would benefit from organized presentation.
+  - “Note/Warning/Tip” content is currently expressed as blockquotes, which is inconsistent and easy to miss.
+- **Primary audiences**: operators/admins (setup + workflows), integrators/IT (systems + security), developers (API + SDK examples).
+- **Success criteria**:
+  - Use **3–4+** different components appropriately.
+  - Improve readability/navigation while **preserving meaning**.
+  - Demonstrate component “fit” (not just using components for novelty).
+
+Based on these facts, I made the following component decisions.
+
+## Decision: Standardize callouts (Notes, warnings, tips)
+
+- **Problem**: Blockquote callouts are inconsistent and don’t reliably signal severity (tip vs warning vs requirement).
+- **Alternatives**:
+  - Keep markdown blockquotes as-is.
+  - Convert key messages into Mintlify callouts (Note/Warning/Tip variants).
+  - Use custom HTML for callout styling.
+- **Decision**: Replace important blockquotes with Mintlify callouts to standardize semantics (e.g., deprecation warnings, hardware requirements, security notes).
+- **Trade-offs**:
+  - **Upside**: Faster scanning; consistent visual hierarchy and severity.
+  - **Downside**: Slightly more verbose MDX and requires consistent style discipline across pages.
+
+## Decision: Use Steps for procedural flows
+
+- **Problem**: Multi-step setup instructions are buried in long paragraphs and lists, making it harder to track progress.
+- **Alternatives**:
+  - Keep numbered lists.
+  - Use a dedicated “Steps” component for guided workflows.
+  - Break each step into separate sub-pages.
+- **Decision**: Use Steps for “do this in order” sections.
+- **Trade-offs**:
+  - **Upside**: Clear progress and better wayfinding for operational readers.
+  - **Downside**: Overuse can make pages feel repetitive; I apply it only to true workflows.
+
+## Decision: Use CodeGroup for multi-language / multi-interface code samples
+
+- **Problem**: Readers need the same action shown in different interfaces (curl/HTTP vs SDK vs GraphQL). Single blocks force scrolling and re-reading context.
+- **Alternatives**:
+  - Leave separate code blocks one after another.
+  - Use a CodeGroup with labeled tabs for each language/interface.
+- **Decision**: Use CodeGroup for every code example regardless of single or multi-language, to create a consistent experience and make it easy to add languages later.
+- **Trade-offs**:
+  - **Upside**: Consistent presentation and easier future expansion.
+  - **Downside**: More effort, need to make sure each code block must use CodeGroup to avoid inconsistency
+
+## Decision: Use Fields for API contracts (request/response)
+
+- **Problem**: In `v2/api-reference.mdx`, critical contract details (headers, params, response shape, error format) are currently split across prose and JSON blocks, which makes it harder to scan and easier to miss requirements.
+- **Alternatives**:
+  - Keep prose + code blocks only.
+  - Use markdown tables for params/responses.
+  - Use Mintlify **Fields** components (`ParamField`, `ResponseField`) for structured contracts.
+- **Decision**: Use **ParamField** for shared items (auth header, rate-limit headers, common error shape) and for a small set of representative endpoints first.
+- **Trade-offs**:
+  - **Upside**: Consistent, scannable API contracts; `ParamField` can enable an API Playground where applicable.
+  - **Downside**: Requires discipline to keep Fields in sync with examples as the API evolves.
+
+## Decision: Use RequestExamples and ResponseExamples components for API documentation
+- **Problem**: API examples are currently static code blocks that don’t clearly differentiate between request and response, and can’t easily show multiple examples
+- **Alternatives**:
+  - Keep static code blocks for examples.
+  - Use **CodeGroup** with labeled tabs for request vs response.
+  - Use **`RequestExample` and `ResponseExample`** components for structured API examples.
+- **Decision**: Use **CodeGroup** with labeled tabs for request vs response examples. Cannot use **`RequestExample`/`ResponseExample`** because they work on all pages while API reference contains many API request/response.
+- **Trade-offs**:
+  - **Upside**: **CodeGroup** display displays the code inline.
+  - **Downside**: **CodeGroup** is not pinned on in the right sidebar, so it can be easily missed by readers.
+
+## Decision: Use Tabs and Accordions to reduce scroll and separate “choose your path” content
+
+- **Problem**: v2 pages mix audiences and options (SSO vs password auth, sensor types, POS providers). This inflates page length and hurts comprehension.
+- **Alternatives**:
+  - Keep everything expanded and linear.
+  - Use **Tabs** for mutually exclusive choices (“pick one”).
+  - Use **Accordions** for optional deep dives (“learn more”).
+- **Decision**: Use:
+  - **Tabs** for mutually exclusive flows (e.g., auth methods, POS integrations).
+  - **Accordions** for progressive disclosure and to organize information.
+- **Trade-offs**:
+  - **Upside**: Makes pages scannable while keeping detail available.
+  - **Downside**: Hidden content can be overlooked; I keep key requirements outside collapsible content.
+
+## Decision: Use Columns + Cards (with icons) for fast scanning
+
+- **Problem**: Several v2 pages have “summary” sections (resources, support channels, feature highlights) that are easy to skim past as plain lists.
+- **Alternatives**:
+  - Keep lists/headings only.
+  - Use **Cards** (in **Columns**) to create scannable entry points.
+  - Use custom HTML/CSS grids.
+- **Decision**: Use **Columns** + **Card** for high-signal collections and add `icon="..."` when it improves recognition (e.g., support channels, emergency support, self-service resources, plan highlights).
+- **Trade-offs**:
+  - **Upside**: Better information scent and quicker “where do I click next?” decisions.
+  - **Downside**: Overuse can feel UI-heavy; I reserve cards for navigation and concise summaries.
+
+## Decision: Sometimes keep (or restore) plain markdown when it reads best
+
+- **Problem**: Not every structured block benefits from being collapsed or tabbed; components can add clicks or hide context.
+- **Alternatives**:
+  - Convert every repeated pattern into a component.
+  - Use components selectively and leave “already clear” content as markdown.
+- **Decision**: Apply components only when they improve UX (scanability, wayfinding, progressive disclosure). If a component adds friction, keep a simple structure.
+- **Trade-offs**:
+  - **Upside**: Aligns with “quality over quantity” and keeps docs feeling technical (not overly “widgetized”).
+  - **Downside**: Requires judgment and consistency; not every page will use the same components everywhere.
+
+## Decision: Use Card / Group cards for high-level navigation within a page
+
+- **Problem**: Top sections like “What’s new” and “Integration categories” are currently plain headings/links and don’t invite exploration.
+- **Alternatives**:
+  - Keep link lists.
+  - Use a Group cards to make entry points scannable and descriptive.
+  - Move this content into the sidebar only.
+- **Decision**: Use Group cards to present the main paths as cards.
+- **Trade-offs**:
+  - **Upside**: Better information scent; users can choose their next step faster.
+  - **Downside**: Too many cards can feel marketing-heavy; I keep cards limited to top-level entry points.
+
+## Decision: Minimal custom HTML/CSS
+
+- **Problem**: Custom styling can improve polish but increases maintenance and can clash with theme updates.
+- **Alternatives**:
+  - Use only Mintlify components.
+  - Use small, scoped HTML/CSS for specific layouts.
+  - Create full custom components (overkill for this task).
+- **Decision**: Prefer Mintlify components; use HTML/CSS only when a layout can’t be expressed cleanly (and keep it minimal and readable).
+- **Trade-offs**:
+  - **Upside**: Maintainable docs with consistent theming.
+  - **Downside**: Less visual freedom in exchange for reliability.
+
+## Decision: Enhance changelog for scanning (without losing detail)
+
+- **Problem**: `v2/changelog.mdx` is information-dense and scroll-heavy; readers commonly come for “latest changes” or to find a specific release.
+- **Alternatives**:
+  - Keep the changelog fully expanded.
+  - Use Mintlify’s **`Update`** component to present entries in a consistent timeline format.
+  - Split releases into separate pages (one per version).
+- **Decision**: Use the **Update** component for each release entry, with a short “Current version” callout at the top.
+- **Trade-offs**:
+  - **Upside**: Faster scanning and less scroll while preserving full release detail.
+  - **Downside**: `Update` auto-generates RSS entries and RSS supports **Markdown only**; if we include components/HTML/code blocks inside an update, we’ll add an `rss` prop with plain-Markdown fallback text (per docs).
+
+## Decision: Reduce pricing page length while preserving plan detail
+
+- **Problem**: `v2/pricing.mdx` is long and repeats a predictable plan structure; readers primarily want a quick comparison, then details for one plan.
+- **Alternatives**:
+  - Keep the full page linear.
+  - Use Tabs for plan-specific details (Starter / Professional / Enterprise).
+  - Use Accordions for “what’s included” sections and add-ons.
+- **Decision**: Use **Tabs** for plan-specific sections and **Accordions** for add-ons/expanded details, with a compact comparison section at the top.
+- **Trade-offs**:
+  - **Upside**: Shortens initial scroll and improves “choose a plan” flow.
+  - **Downside**: Some users may miss hidden details; keep key differentiators and pricing visible outside collapsibles.
