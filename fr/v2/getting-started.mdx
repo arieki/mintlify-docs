@@ -19,6 +19,423 @@ Avant de commencer, assurez-vous d'avoir :
 
 ## Assistant de configuration rapide
 
+<Tabs>
+   <Tab title="Assistant de configuration rapide">
+      <Note>
+         **Configuration intelligente** : v2.0 inclut un assistant de configuration alimenté par IA qui analyse votre profil de restaurant et recommande une configuration optimale.
+      </Note>
+
+      <Steps>
+         <Step title="Créer votre compte">
+            Inscrivez-vous avec votre e-mail professionnel. v2.0 offre l'intégration SSO avec Google, Microsoft et Okta pour les clients entreprise.
+            <Tip>
+               Les clients entreprise peuvent activer le SSO dès l’inscription pour un accès d’équipe simplifié.
+            </Tip>
+         </Step>
+         <Step title="Configuration de profil intelligente">
+            Notre assistant IA analyse votre type de restaurant et recommande les paramètres optimaux. Répondez simplement à quelques questions sur vos opérations.
+         </Step>
+         <Step title="Connecter vos systèmes">
+            v2.0 détecte les systèmes compatibles sur votre réseau et propose une configuration d’intégration en un clic pour les plateformes prises en charge.
+         </Step>
+         <Step title="Importer les données historiques">
+            Importez (optionnellement) l’historique des ventes et de la production pour entraîner le moteur de prévision IA et obtenir des insights plus rapidement.
+         </Step>
+         <Step title="Configurer les fonctionnalités IA">
+            Activez la prévision de demande, la prédiction de qualité et le réapprovisionnement automatique selon vos besoins opérationnels.
+         </Step>
+      </Steps>
+   </Tab>
+   <Tab title="Configuration du compte">
+      <AccordionGroup>
+         <Accordion title="Étape 1 : Création de compte avancée" defaultOpen>
+            <Steps>
+               <Step title="Visiter la page d'inscription">
+                  Rendez-vous sur notre [page d'inscription](https://app.salsaasaservice.com/signup) pour créer votre compte.
+               </Step>
+               <Step title="Choisir la méthode d'authentification">
+                  Sélectionnez parmi plusieurs options :
+                  - E-mail/mot de passe avec 2FA
+                  - SSO (Google, Microsoft, Okta)
+                  - SAML 2.0 pour les clients entreprise
+               </Step>
+               <Step title="Vérifier votre e-mail ou fournisseur SSO"/>
+               <Step title="Finaliser la vérification d'entreprise améliorée"/>
+            </Steps>
+            <Note>
+               **Sécurité renforcée :** v2.0 prend en charge l’authentification biométrique, les clés de sécurité matérielles et des options de connexion sans mot de passe.
+            </Note>
+         </Accordion>
+
+         <Accordion title="Étape 2 : Configuration de profil assistée par IA" defaultOpen>
+            Allez dans **Paramètres > Profil du restaurant** où notre assistant IA vous guide :
+            
+            <Tabs>
+               <Tab title="Informations de base">
+                  - Nom du restaurant, adresse et contacts
+                  - Type de cuisine et spécialités
+                  - Nombre de sites et régions géographiques
+                  - Horaires d’ouverture et pics d’activité
+                  - **Nouveau** : Importez votre menu pour des suggestions de recettes automatiques
+               </Tab>
+               <Tab title="Infrastructure cuisine">
+                  - Taille, agencement et inventaire des équipements
+                  - Nombre de postes de préparation et capacité de production
+                  - Spécifications de réfrigération et de stockage
+                  - **Nouveau** : Recommandations de placement des capteurs IoT
+                  - **Nouveau** : Intégration d’équipements (fours, réfrigérateurs connectés)
+               </Tab>
+               <Tab title="Opérations">
+                  - Volume de production quotidien et historique
+                  - Variétés de salsa et recettes actuelles
+                  - Heures de production de pointe et saisonnalité
+                  - **Nouveau** : L’IA analyse vos schémas et propose des optimisations
+                  - **Nouveau** : Suivi des déchets et objectifs de durabilité
+               </Tab>
+               <Tab title="Équipe et permissions">
+                  - Structure d’équipe et organisation
+                  - Configuration du contrôle d’accès basé sur les rôles (RBAC)
+                  - Politiques de permissions personnalisées
+                  - **Nouveau** : Intégration du contrôle d’accès biométrique
+                  - **Nouveau** : Règles d’authentification basées sur l’activité
+               </Tab>
+            </Tabs>
+         </Accordion>
+      </AccordionGroup>
+   </Tab>
+</Tabs>
+
+## Configuration des fonctionnalités IA
+
+### Configuration de prévision de demande
+
+Activez la prévision de demande alimentée par IA pour prédire les besoins en salsa 7-30 jours à l'avance :
+
+<Steps>
+   <Step title="Activer les prévisions">
+      Allez dans **Fonctionnalités IA > Prévision de demande** et activez la fonctionnalité.
+   </Step>
+   <Step title="Connecter les sources de données">
+      Liez votre système POS, votre système de réservation et toutes sources externes (API météo, calendriers d’événements locaux).
+   </Step>
+   <Step title="Importer les données historiques">
+      Importez au moins 90 jours de données de ventes historiques pour une précision optimale. L’IA s’améliore avec le temps.
+   </Step>
+   <Step title="Définir les paramètres">
+      Configurez l’horizon de prévision (7, 14 ou 30 jours), les intervalles de confiance et les seuils d’alerte.
+   </Step>
+   <Step title="Revoir la première prévision">
+      L’IA génère votre première prévision sous 24 heures. Revoyez et ajustez si nécessaire.
+   </Step>
+</Steps>
+
+<Note>
+   **Précision des prévisions** : L'IA atteint une précision de 70-80% avec 90 jours de données et s'améliore à 95%+ après 6 mois.
+</Note>
+
+### Prédiction de qualité
+
+Configurez la surveillance qualité par IA pour détecter les problèmes avant qu’ils ne surviennent :
+
+<CodeGroup>
+```javascript JavaScript
+// Exemple : configurer la surveillance qualité via l’API
+const qualityConfig = {
+  enabled: true,
+  monitoring_interval: "5m",  // Vérification toutes les 5 minutes
+  thresholds: {
+    temperature: { min: 35, max: 40, unit: "F" },
+    freshness_score: { min: 8.0, max: 10.0 },
+    consistency: { min: 7.5 }
+  },
+  alert_channels: ["email", "sms", "push", "slack"],
+  auto_action: {
+    low_quality_detected: "pause_production",
+    temperature_violation: "notify_manager"
+  }
+};
+```
+</CodeGroup>
+
+## Intégration de capteurs IoT
+
+### Types de capteurs supportés
+
+v2.0 s'intègre avec une large gamme de capteurs IoT :
+
+<Columns cols={3}>
+  <Card title="Capteurs de température" icon="thermometer" href="#capteurs-de-temperature">
+    Surveillez la réfrigération et les températures de cuisson en temps réel.
+  </Card>
+  <Card title="Capteurs de fraîcheur" icon="leaf" href="#capteurs-de-fraicheur">
+    Les capteurs RFID et chimiques suivent la fraîcheur des ingrédients.
+  </Card>
+  <Card title="Mesureurs de qualité" icon="check" href="#mesureurs-de-qualite">
+    Mesure automatisée du pH, de la viscosité et de la consistance.
+  </Card>
+</Columns>
+
+### Capteurs de température
+
+Déployez des capteurs dans les zones critiques de froid/chaud pour détecter rapidement les écarts.
+
+### Capteurs de fraîcheur
+
+Suivez la fraîcheur des ingrédients à l’aide de RFID ou de capteurs de conditions de stockage.
+
+### Mesureurs de qualité
+
+Automatisez les contrôles de pH et de consistance pour une qualité constante.
+
+### Configuration des capteurs IoT
+
+<Steps>
+   <Step title="Sélection du matériel">
+      Choisissez des capteurs compatibles dans notre [catalogue de matériel certifié](https://salsaasaservice.com/hardware) ou utilisez nos kits préconfigurés.
+   </Step>
+   <Step title="Installation physique">
+      Suivez le guide d’installation pour placer les capteurs aux emplacements optimaux. Notre application mobile inclut une visualisation AR pour le placement.
+   </Step>
+   <Step title="Configuration réseau">
+      Connectez les capteurs via Wi-Fi, Bluetooth ou notre passerelle IoT.
+   </Step>
+   <Step title="Enregistrement des capteurs">
+      Utilisez l’application mobile pour scanner les QR codes des capteurs et les enregistrer automatiquement sur votre compte.
+   </Step>
+   <Step title="Calibration">
+      Lancez la calibration automatisée pour garantir des mesures fiables.
+   </Step>
+</Steps>
+
+<Warning>
+  **Exigences matérielles :** les capteurs IoT nécessitent une connexion réseau stable. Nous recommandons un réseau IoT dédié pour la sécurité et la fiabilité.
+</Warning>
+
+## Configuration d'intégration avancée
+
+### Intégration système POS (améliorée)
+
+v2.0 offre une intégration POS améliorée avec synchronisation bidirectionnelle en temps réel :
+<Tabs>
+   <Tab title="Square">
+      1. **Connexion en un clic**
+         Allez dans **Intégrations > Systèmes POS** et cliquez sur « Connecter Square ». Autorisez via OAuth 2.0.
+
+      2. **Mappage automatique du menu**
+         L’IA mappe automatiquement les éléments du menu Square vers les articles d’inventaire avec 98% de précision. Vérifiez et confirmez.
+
+      3. **Synchronisation en temps réel**
+         Activez les mises à jour d’inventaire en temps réel. Les ventes se synchronisent en moins de 5 secondes.
+
+      4. **Configurer les webhooks**
+         Configurez des webhooks bidirectionnels pour des mises à jour instantanées dans les deux systèmes.
+   </Tab>
+   <Tab title="Toast">
+      1. **Connexion via clé API**
+         Saisissez vos identifiants API Toast. v2.0 prend en charge la dernière API v2 de Toast.
+
+      2. **Synchronisation du menu**
+         L’IA mappe les structures de menu complexes, y compris les modificateurs et combos.
+
+      3. **Multi-sites**
+         Configurez des paramètres spécifiques à chaque site pour les groupes de restaurants.
+   </Tab>
+   <Tab title="Clover">
+      1. **Installation de l’application**
+         Installez Salsa as a Service v2.0 depuis le Clover App Market.
+
+      2. **Attribution des permissions**
+         Accordez les permissions nécessaires pour l’accès aux stocks et aux données de ventes.
+         
+      3. **Configuration de synchronisation**
+         Choisissez la fréquence de synchronisation et la portée des données.
+   </Tab>
+   <Tab title="POS entreprise">
+      Pour les POS entreprise (Oracle Micros, NCR Aloha, etc.) :
+      - **Intégration sur mesure** : notre équipe construit une intégration adaptée
+      - **Passerelle API** : utilisez notre passerelle entreprise pour une connectivité sécurisée
+      - **Pipeline ETL** : configurez les règles de transformation des données
+      - **Support dédié** : un ingénieur d’intégration dédié pour les clients entreprise
+   </Tab>
+</Tabs>
+
+### Intégration de la chaîne d’approvisionnement
+
+<Note>
+  <strong>Nouveau dans v2.0 :</strong> l’intégration directe avec de grands distributeurs alimentaires permet la commande automatisée basée sur les prévisions IA.
+</Note>
+
+Distributeurs pris en charge :
+- Sysco
+- US Foods
+- Performance Food Group
+- Gordon Food Service
+- Distributeurs locaux/régionaux via API
+
+### Intégration ERP
+
+Connectez v2.0 à votre système ERP :
+
+<CodeGroup>
+```python python
+# Exemple : configuration d’intégration ERP
+from salsa_sdk import SalsaClient
+
+client = SalsaClient(api_key="your_api_key")
+
+# Connexion à SAP
+erp_connection = client.integrations.connect_erp(
+    system="sap",
+    credentials={
+        "host": "erp.yourcompany.com",
+        "client": "100",
+        "username": "SALSA_INT",
+        "auth_type": "oauth"
+    },
+    sync_options={
+        "inventory": True,
+        "procurement": True,
+        "cost_accounting": True,
+        "frequency": "real-time"
+    }
+)
+
+print(f"ERP connected: {erp_connection.status}")
+```
+</CodeGroup>
+
+## Première production avec IA
+
+Une fois la configuration terminée, lancez votre première production améliorée par IA :
+
+<Steps>
+  <Step title="Revoir la prévision IA">
+    Consultez la prévision de demande pour aujourd’hui et les prochains jours dans <strong>Tableau de bord &gt; Prévisions</strong>.
+  </Step>
+  <Step title="Démarrer la production intelligente">
+    Allez dans <strong>Production &gt; Lot intelligent</strong> et laissez l’IA recommander la taille et le timing optimaux.
+  </Step>
+  <Step title="Surveillance en temps réel">
+    Les capteurs IoT suivent automatiquement la qualité. Visualisez les métriques sur votre tableau de bord ou l’application mobile.
+  </Step>
+  <Step title="Vérification qualité">
+    L’IA analyse les données capteurs et fournit un score qualité prédit avant la fin du lot.
+  </Step>
+  <Step title="Terminer et apprendre">
+    Terminez le lot. L’IA apprend de cette production pour améliorer les prévisions et recommandations futures.
+  </Step>
+</Steps>
+
+## Fonctionnalités de l’application mobile
+
+L’application mobile v2.0 inclut des améliorations importantes :
+
+<Columns cols={3}>
+  <Card title="Mode hors ligne" icon="robot" href="#mode-hors-ligne">
+    Fonctionnalité complète sans internet. Synchronisation automatique au retour de la connexion.
+  </Card>
+  <Card title="Placement des capteurs en AR" icon="bell" href="#fonctionnalites-ar">
+    Utilisez la réalité augmentée pour visualiser le meilleur placement des capteurs.
+  </Card>
+  <Card title="Commandes vocales" icon="mobile" href="#commandes-vocales">
+    Utilisation mains libres avec des commandes en langage naturel.
+  </Card>
+</Columns>
+
+## Prochaines étapes
+
+Maintenant que tout est en place, explorez ces fonctionnalités :
+
+<Columns cols={3}>
+  <Card title="Utilisation avancée" href="/fr/v2/utilisation-avancee" arrow="true">
+    Plongée approfondie dans la prévision IA, la surveillance IoT et l’automatisation.
+  </Card>
+  <Card title="Guide d’intégrations" href="/fr/v2/integrations" arrow="true">
+    Explorez toutes les 50+ intégrations disponibles.
+  </Card>
+  <Card title="Documentation API" href="/fr/v2/api-reference" arrow="true">
+    Construisez des intégrations personnalisées avec notre API GraphQL.
+  </Card>
+</Columns>
+
+## Migration depuis v1.0
+
+<Tabs>
+   <Tab title="Migration automatique">
+      <Tip>
+         **Recommandée pour la plupart des clients**
+      </Tip>
+      <Steps>
+         <Step title="Demander la migration depuis votre tableau de bord"/>
+         <Step title="Notre équipe examine votre configuration"/>
+         <Step title="La migration se fait automatiquement sans interruption"/>
+         <Step title="Données, recettes et intégrations sont transférées en toute transparence"/>
+         <Step title="Formation aux nouvelles fonctionnalités v2.0"/>
+      </Steps>
+   </Tab>
+   <Tab title="Migration manuelle">
+      <Note>
+         **Pour les configurations personnalisées complexes**
+      </Note>
+      <Steps>
+         <Step title="Exporter les données v1.0 avec l’outil de migration"/>
+         <Step title="Revoir le rapport de compatibilité"/>
+         <Step title="Adapter les intégrations personnalisées à l’API v2.0"/>
+         <Step title="Importer les données dans le compte v2.0"/>
+         <Step title="Valider et tester avant bascule"/>
+      </Steps>
+   </Tab>
+</Tabs>
+
+## Besoin d'aide ?
+
+v2.0 inclut des options de support améliorées :
+
+<Columns cols={2}>
+  <Card title="Assistant IA" icon="message-bot">
+    Assistant IA dans l’application pour répondre aux questions et guider 24/7.
+  </Card>
+  <Card title="Support par e-mail" icon="envelope" href="mailto:support@salsaasaservice.com" arrow="true">
+    support@salsaasaservice.com (réponse sous 2-4 heures)
+  </Card>
+  <Card title="Chat en direct" icon="messages">
+    Support chat 24/7 depuis votre tableau de bord
+  </Card>
+  <Card title="Support téléphonique" icon="phone">
+    1-800-SALSA-V2 (horaires étendus pour les clients v2.0)
+  </Card>
+  <Card title="Bibliothèque vidéo" icon="video">
+    Tutoriels vidéo complets pour toutes les fonctionnalités
+  </Card>
+  <Card title="Documentation" icon="book-open">
+    Guides détaillés et documentation API
+  </Card>
+</Columns>
+
+<Note>
+  <strong>Intégration gratuite :</strong> Tous les clients v2.0 reçoivent des sessions d’intégration gratuites avec notre équipe de succès client.
+</Note>
+---
+title: "Démarrage avec v2.0"
+description: "Guide complet pour configurer Salsa as a Service v2.0 avec fonctionnalités IA et intégration IoT"
+---
+
+# Démarrage avec Salsa as a Service v2.0
+
+Bienvenue sur v2.0 ! Ce guide vous aidera à configurer votre compte et à exploiter les nouvelles fonctionnalités alimentées par IA, capteurs IoT et intégrations avancées.
+
+## Prérequis
+
+Avant de commencer, assurez-vous d'avoir :
+
+- Une adresse e-mail professionnelle valide
+- Accès aux systèmes de votre restaurant (POS, inventaire, etc.)
+- Connaissance de base de vos opérations actuelles de salsa
+- Accès administrateur pour configurer les intégrations
+- **Nouveau dans v2.0** : Matériel de capteurs IoT optionnel pour surveillance qualité
+
+## Assistant de configuration rapide
+
 > **Note:**
 **Configuration intelligente** : v2.0 inclut un assistant de configuration alimenté par IA qui analyse votre profil de restaurant et recommande une configuration optimale.
 
